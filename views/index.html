@@ -1,0 +1,45 @@
+<!-- <!DOCTYPE html> -->
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Migration Topology</title>
+    <script src='https://d3js.org/d3.v5.min.js'></script>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <script>
+        //var kubeFile = #{Jdata|safe};
+        var kubeFile = <%- Data %>;
+        
+        console.log(kubeFile);
+    </script>
+    <link rel="stylesheet" type="text/css" href="stylesheets/style2.css">
+</head>
+
+<body id="main">
+    <div class="title">
+        <br>
+        <font size="6" face="gothic">
+            <CENTER>
+                <b>CLUSTER TOPOLOGY</b>
+            </CENTER>
+        </font>
+    </div>
+    <br>
+    <div class="team">
+        <font size="3" face="gothic">
+            <CENter>
+                <b> Team Dodge</b>
+            </CENter>
+        </font>
+    </div>
+    <br>
+    <hr>
+    <svg id="viz" viewbox="0 0 1800 750" preserveAspectRatio="xMidYMid meet"></svg>
+    <script src="javascripts/v5_graph.js"></script>
+
+</body>
+
+</html>
