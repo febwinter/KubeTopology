@@ -3,6 +3,7 @@ var height = 750;
 var color = d3.scaleOrdinal(d3.schemePaired);
 var graph = kubeFile;
 //console.log(kubeFile)
+var migratePod_global;
 var label = {
     'nodes': [],
     'links': []
@@ -24,6 +25,7 @@ graph.nodes.forEach(function (d, i) {
 var labelLayout = d3.forceSimulation(label.nodes)
     .force("charge", d3.forceManyBody().strength(-50))
     .force("link", d3.forceLink(label.links).distance(0).strength(2));
+    //.alphaTarget(0);
 
 var graphLayout = d3.forceSimulation(graph.nodes)
     .force("charge", d3.forceManyBody().strength(-3000))
@@ -33,10 +35,11 @@ var graphLayout = d3.forceSimulation(graph.nodes)
     .force("link", d3.forceLink(graph.links).id(function (d) {
         return d.id;
     }).distance(function (i, d) {
-        if (i.source.id === 0) {
+        if (i.source.id.indexOf('edge') !== -1) {
+            //console.log(i.source.id);
             return 150;
         } else {
-            // console.log(i.source.id)
+            //console.log(i.source.id)
             return 50;
         }
     }).strength(1))
@@ -52,7 +55,6 @@ graph.links.forEach(function (d) {
 function neigh(a, b) {
     return a == b || adjlist[a + "-" + b];
 }
-
 
 
 var svg = d3.select("#viz").attr("width", width).attr("height", height);
@@ -111,6 +113,26 @@ var labelNode = container.append("g").attr("class", "labelNodes")
 //.style("")
 
 node.on("mouseover", focus).on("mouseout", unfocus);
+//console.log(link);
+//console.log('avtive');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function ticked() {
 
