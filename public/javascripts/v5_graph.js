@@ -3,6 +3,9 @@ var height = 750;
 var color = d3.scaleOrdinal(d3.schemePaired);
 var graph = kubeFile;
 //console.log(kubeFile)
+var sourceNode_global;
+var targetNode_global;
+var origin_global;
 var migratePod_global;
 var label = {
     'nodes': [],
@@ -21,6 +24,8 @@ graph.nodes.forEach(function (d, i) {
         target: i * 2 + 1
     });
 });
+// console.log(graph);
+// console.log(label);
 
 var labelLayout = d3.forceSimulation(label.nodes)
     .force("charge", d3.forceManyBody().strength(-50))
@@ -115,10 +120,6 @@ var labelNode = container.append("g").attr("class", "labelNodes")
 node.on("mouseover", focus).on("mouseout", unfocus);
 //console.log(link);
 //console.log('avtive');
-
-
-
-
 
 
 
