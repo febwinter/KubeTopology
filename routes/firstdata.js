@@ -48,7 +48,6 @@ exports.test = function () {
                     });
                 }
             }
-             console.log("active!" + masterName);
             tempNode.push(i.metadata.name);
         }
 
@@ -65,7 +64,6 @@ exports.test = function () {
                     "source": i.metadata.name,
                     "target": i.spec.nodeName
                 });
-                //console.log('active');
             }
         }
 
