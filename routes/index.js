@@ -8,7 +8,7 @@ router.get('/dashboard', function(req, res, next) {
   var data = getJson();
   //res.render('index.html', {Data: data});
   data.then(d => {
-    console.log(d); 
+    //console.log(d); 
     res.render('index.html', {Data: d});
   });
 });

@@ -18,7 +18,7 @@ exports.test = function () {
         var tempNode = new Array();
         var masterName = "";
 
-        for (var i of Nodes.items) {
+        for(var i of Nodes.items) {
             if (i.metadata.labels['nodetype'] == 'master') {
                 nodeList.push({
                     "id": i.metadata.name,
@@ -26,6 +26,13 @@ exports.test = function () {
                     "size": 40
                 });
                 masterName = i.metadata.name;
+            }
+        }
+
+        for (var i of Nodes.items) {
+            //console.log(i.metadata.labels['nodetype']);
+            if (i.metadata.labels['nodetype'] == 'master') {
+                continue;
             } else {
                 if (i.spec.taints != null && i.spec.taints[0].key.includes('unreachable') != false) {
                     continue;
@@ -41,6 +48,7 @@ exports.test = function () {
                     });
                 }
             }
+             console.log("active!" + masterName);
             tempNode.push(i.metadata.name);
         }
 
