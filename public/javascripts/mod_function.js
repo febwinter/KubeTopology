@@ -1,12 +1,11 @@
 function migration_request(data, graph, label) {
     var startNode = data.sender["node"];
-    //console.log(graph);
     for (var i of graph.nodes) {
         if (i.id == startNode) {
-            i.group = 3;
+            i.group = 7;
         }
     }
-
+    console.log(graph.nodes);
 }
 
 function migration_ack(data, graph, label) {
@@ -33,8 +32,6 @@ function migration_ready(data, graph, label) {
         "target": migrateNode
     });
     migratePod_global = migratePod;
-    //console.log(label.nodes);
-    //console.log(label.links);
 }
 
 function migration_start(data, graph, label) {
@@ -52,11 +49,12 @@ function resetGraph(graphLayout, labelLayout, graph, label) {
         return d.id;
     });
     node.exit().remove();
-    node = node.enter().append("circle").attr("fill", function (d) {
-        return color(d.group);
-    }).attr("r", function (d) {
+    node = node.enter().append("circle").attr("r", function (d) {
         return d.size
-    }).merge(node);
+    }).merge(node).attr("fill", function (d) {
+        console.log(d.group);
+        return color(d.group);
+    });
 
     // Apply the general update pattern to the links.
     link = link.data(graph.links, function (d) {
@@ -87,8 +85,8 @@ function resetGraph(graphLayout, labelLayout, graph, label) {
         }).strength(1))
         .on("tick", ticked);
 
-    graphLayout.alpha(1).restart();
-    //graphLayout.on("tick", ticked);
+    graphLayout.alpha(0.1).restart();
+
 
     graph.links.forEach(function (d) {
         adjlist[d.source.index + "-" + d.target.index] = true;
@@ -135,9 +133,11 @@ function resetGraph(graphLayout, labelLayout, graph, label) {
     labelLayout.nodes(label.nodes);
     labelLayout.force("charge", d3.forceManyBody().strength(-50))
         .force("link", d3.forceLink(label.links).distance(0).strength(2));
-    labelLayout.restart();
+    labelLayout.alpha(0.1).restart();
 
+
+    //graphLayout.on("tick", ticked);
     node.on("mouseover", focus).on("mouseout", unfocus);
-
+    ticked();
     //console.log(label.nodes);
 }
