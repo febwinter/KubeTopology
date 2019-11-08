@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const mqtt = require('mqtt');
+var amqp = require('amqplib/callback_api');
 
 //socket.io
 var io = require('socket.io').listen(3100);
@@ -54,36 +55,71 @@ app.use(function (err, req, res, next) {
 /* MQTT setting */
 
 const options = {
-  host: '127.0.0.1',
-  post: 1883,
-  protocol: 'mqtt',
+  username: 'rabbitmq',
+  password: 'rabbitmq'
 };
-const client = mqtt.connect(options);
-client.on("connect", (res) => {
-  console.log("connection :" + client.connected);
-});
-const topicList = ['topic/test1', 'topic/test2', 'topic/test3'];
-client.subscribe(topicList);
+// const client = mqtt.connect('amqp://192.168.10.220:30672/', options);
+// client.on("connect", (res) => {
+//   console.log('mqtt connected')
+//   console.log("connection :" + client.connected);
+// });
+// //const topicList = ['topic/test1', 'topic/test2', 'topic/test3'];
+// client.subscribe('queues/dashboard');
+// client.
+
+/* AMQP SETTING */
+
+const url = 'amqp://rabbitmq:rabbitmq@192.168.10.220:30672';
+const queueName = 'dashboard';
 
 /* Connect To MQTT Local Host */
 
 io.on('connection', function (socket) {
-  console.log('connect');
+  console.log('socket connected');
 
-  
+
   // socket.on('msg', function (data) {
-  //     console.log(data);
-  //     socket.emit('recMsg', jsonMsg);
+  //   console.log(data);
+  //   socket.emit('recMsg', jsonMsg);
   // })
-  // MQTT SEND
-  client.on('message', (topic, message, packet) => {
-    var jsonMsg = JSON.parse(message);
-    //console.log(jsonMsg);
-  
-    //socket.io
-    socket.emit('recMsg', jsonMsg)
-  
+  //MQTT get
+
+  // client.on('message', (topic, message, packet) => {
+  //   console.log('Message Come in!');
+  //   var jsonMsg = JSON.parse(message);
+  //   //console.log(jsonMsg);
+
+  //   //socket.io
+  //   socket.emit('recMsg', jsonMsg)
+
+  // });
+
+  amqp.connect(url, function (error0, connection) {
+    if (error0) {
+      throw error0;
+    }
+    connection.createChannel(function (error1, channel) {
+      if (error1) {
+        throw error1;
+      }
+
+      channel.assertQueue(queueName, {
+        durable: true
+      });
+
+      channel.consume(queueName, function (msg) {
+        console.log(JSON.parse(msg.content));
+        var jsonMsg = JSON.parse(msg.content);
+        socket.emit('recMsg', jsonMsg);
+      }, {
+        noAck: true
+      });
+
+
+    });
   });
+
+
 
 });
 
