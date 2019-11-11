@@ -108,11 +108,12 @@ io.on('connection', function (socket) {
       });
 
       channel.consume(queueName, function (msg) {
+        channel.ack(msg);
         console.log(JSON.parse(msg.content));
-        var jsonMsg = JSON.parse(msg.content);
-        socket.emit('recMsg', jsonMsg);
+        socket.emit('recMsg', JSON.parse(msg.content));
+        //setTimeout(1000);
       }, {
-        noAck: true
+        noAck: false
       });
 
 

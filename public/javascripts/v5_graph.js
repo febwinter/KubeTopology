@@ -24,13 +24,10 @@ graph.nodes.forEach(function (d, i) {
         target: i * 2 + 1
     });
 });
-// console.log(graph);
-// console.log(label);
 
 var labelLayout = d3.forceSimulation(label.nodes)
     .force("charge", d3.forceManyBody().strength(-50))
     .force("link", d3.forceLink(label.links).distance(0).strength(2));
-    //.alphaTarget(0);
 
 var graphLayout = d3.forceSimulation(graph.nodes)
     .force("charge", d3.forceManyBody().strength(-3000))
@@ -41,10 +38,8 @@ var graphLayout = d3.forceSimulation(graph.nodes)
         return d.id;
     }).distance(function (i, d) {
         if (i.source.id.indexOf('edge') !== -1) {
-            //console.log(i.source.id);
             return 150;
         } else {
-            //console.log(i.source.id)
             return 50;
         }
     }).strength(1))
@@ -111,9 +106,10 @@ var labelNode = container.append("g").attr("class", "labelNodes")
     .text(function (d, i) {
         return i % 2 == 0 ? "" : d.node.id; // name
     })
-    .style("fill", "#555")
+    .style("fill", "#F6F6F6")
     .style("font-family", "Arial")
-    .style("font-size", 12)
+    .style("font-size", 10)
+    .style("font-weight", "lighter")
     .style("pointer-events", "none"); // to prevent mouseover/drag capture
 //.style("")
 
