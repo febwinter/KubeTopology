@@ -1,8 +1,8 @@
 var width = 1800;
 var height = 750;
-var color = d3.scaleOrdinal(d3.schemePaired);
+//var color = d3.scaleOrdinal(d3.schemePaired);
+var color = d3.scaleOrdinal().range(["#A566FF", "#6B66FF", "#B2CCFF", "#FF3636", "#FFB2F5", "#47C83E", "#CEF279", "#FF5E00"]);
 var graph = kubeFile;
-//console.log(kubeFile)
 var sourceNode_global;
 var targetNode_global;
 var origin_global;
@@ -111,11 +111,8 @@ var labelNode = container.append("g").attr("class", "labelNodes")
     .style("font-size", 10)
     .style("font-weight", "lighter")
     .style("pointer-events", "none"); // to prevent mouseover/drag capture
-//.style("")
 
 node.on("mouseover", focus).on("mouseout", unfocus);
-//console.log(link);
-//console.log('avtive');
 
 
 
@@ -221,4 +218,3 @@ function dragended(d) {
     d.fx = null;
     d.fy = null;
 }
-

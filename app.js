@@ -3,7 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const mqtt = require('mqtt');
+//const mqtt = require('mqtt');
 var amqp = require('amqplib/callback_api');
 
 //socket.io
@@ -16,9 +16,6 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
-// socket.io
-//app.use(express.static(path.join(__dirname, 'public')));
-//app.use(express.static(path.join(__dirname,'node_modules')));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -32,6 +29,8 @@ app.use(express.urlencoded({
 }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+//add
+app.use(express.static(path.join(__dirname,'node_modules')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
@@ -52,21 +51,6 @@ app.use(function (err, req, res, next) {
   res.render('error');
 });
 
-/* MQTT setting */
-
-const options = {
-  username: 'rabbitmq',
-  password: 'rabbitmq'
-};
-// const client = mqtt.connect('amqp://192.168.10.220:30672/', options);
-// client.on("connect", (res) => {
-//   console.log('mqtt connected')
-//   console.log("connection :" + client.connected);
-// });
-// //const topicList = ['topic/test1', 'topic/test2', 'topic/test3'];
-// client.subscribe('queues/dashboard');
-// client.
-
 /* AMQP SETTING */
 
 const url = 'amqp://rabbitmq:rabbitmq@192.168.10.220:30672';
@@ -77,26 +61,12 @@ const queueName = 'dashboard';
 io.on('connection', function (socket) {
   console.log('socket connected');
 
-
-  // socket.on('msg', function (data) {
-  //   console.log(data);
-  //   socket.emit('recMsg', jsonMsg);
-  // })
-  //MQTT get
-
-  // client.on('message', (topic, message, packet) => {
-  //   console.log('Message Come in!');
-  //   var jsonMsg = JSON.parse(message);
-  //   //console.log(jsonMsg);
-
-  //   //socket.io
-  //   socket.emit('recMsg', jsonMsg)
-
-  // });
-
   amqp.connect(url, function (error0, connection) {
     if (error0) {
       throw error0;
+    }
+    else {
+      console.log("MQTT connected")
     }
     connection.createChannel(function (error1, channel) {
       if (error1) {
@@ -108,10 +78,10 @@ io.on('connection', function (socket) {
       });
 
       channel.consume(queueName, function (msg) {
-        channel.ack(msg);
+        console.log("Get MQTT message");
         console.log(JSON.parse(msg.content));
         socket.emit('recMsg', JSON.parse(msg.content));
-        //setTimeout(1000);
+        channel.ack(msg);
       }, {
         noAck: false
       });
@@ -119,8 +89,6 @@ io.on('connection', function (socket) {
 
     });
   });
-
-
 
 });
 
