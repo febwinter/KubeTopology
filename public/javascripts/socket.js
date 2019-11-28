@@ -28,6 +28,5 @@ socket.on('recMsg', function (data) {
         migration_complete(data, graph, label);
         resetGraph_color(graphLayout,labelLayout, graph,label)
         
-    }
-    
+    }    
 });

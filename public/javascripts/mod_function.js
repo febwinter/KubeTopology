@@ -163,9 +163,10 @@ function resetGraph_generate(graphLayout, labelLayout, graph, label) {
         .text(function (d, i) {
             return i % 2 == 0 ? "" : d.node.id; // name
         })
-        .style("fill", "#555")
+        .style("fill", "#F6F6F6")
         .style("font-family", "Arial")
-        .style("font-size", 12)
+        .style("font-size", 10)
+        .style("font-weight", "lighter")
         .style("pointer-events", "none").merge(labelNode);
 
     labelLayout.nodes(label.nodes);

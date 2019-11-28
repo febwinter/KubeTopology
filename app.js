@@ -30,7 +30,7 @@ app.use(express.urlencoded({
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 //add
-app.use(express.static(path.join(__dirname,'node_modules')));
+app.use(express.static(path.join(__dirname, 'node_modules')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
@@ -61,34 +61,70 @@ const queueName = 'dashboard';
 io.on('connection', function (socket) {
   console.log('socket connected');
 
-  amqp.connect(url, function (error0, connection) {
-    if (error0) {
-      throw error0;
+  amqp.connect(url, function (error, connect) {
+    if (error) {
+      console.log(error);
+      return;
     }
-    else {
-      console.log("MQTT connected")
-    }
-    connection.createChannel(function (error1, channel) {
-      if (error1) {
-        throw error1;
+    connect.createChannel(function (error, channel) {
+      if (error) {
+        console.log(error);
+        return;
       }
-
       channel.assertQueue(queueName, {
         durable: true
+      }, function (error) {
+        function recevieMessage() {
+          console.log("chekcing");
+          channel.get(queueName, {}, function (error, message) {
+            if (error) {
+              console.log(error);
+            } else if (message) {
+              console.log("Get MQTT message");
+              channel.ack(message);
+              console.log(JSON.parse(message.content));
+              socket.emit('recMsg', JSON.parse(message.content));
+              setTimeout(recevieMessage,3000);
+            }
+            else {
+              setTimeout(recevieMessage,1000);
+            }
+
+          });
+        }
+        recevieMessage();
       });
-
-      channel.consume(queueName, function (msg) {
-        console.log("Get MQTT message");
-        console.log(JSON.parse(msg.content));
-        socket.emit('recMsg', JSON.parse(msg.content));
-        channel.ack(msg);
-      }, {
-        noAck: false
-      });
-
-
     });
   });
+
+
+//   amqp.connect(url, function (error0, connection) {
+//     if (error0) {
+//       throw error0;
+//     } else {
+//       console.log("MQTT connected")
+//     }
+//     connection.createChannel(function (error1, channel) {
+//       if (error1) {
+//         throw error1;
+//       }
+
+//       channel.assertQueue(queueName, {
+//         durable: true
+//       });
+
+//       channel.consume(queueName, function (msg) {
+//         console.log("Get MQTT message");
+//         console.log(JSON.parse(msg.content));
+//         socket.emit('recMsg', JSON.parse(msg.content));
+//         //channel.ack(msg);
+//       }, {
+//         noAck: false
+//       });
+
+
+//     });
+//   });
 
 });
 
