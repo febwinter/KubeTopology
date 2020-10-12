@@ -32,6 +32,24 @@ This k8s dashboard provide pod live migration monitoring. You can use this dashb
   - Docker
   - ampq
 
+
+
+## Start
+
+1. Start npm
+
+   ```bash
+   $ npm start
+   ```
+
+2. Connect to dashboard
+
+   ```bash
+   $ http://[ip address]:8000/dashboard
+   ```
+
+
+
 ## Cuation
 
 This repository doesn't include live migration agent 
