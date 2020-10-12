@@ -32,6 +32,7 @@ exports.test = function () {
         for (var i of Nodes.items) {
             //console.log(i.metadata.labels['nodetype']);
             if (i.metadata.labels['nodetype'] == 'master') {
+                tempNode.push(i.metadata.name);
                 continue;
             } else {
                 if (i.spec.taints != null && i.spec.taints[0].key.includes('unreachable') != false) {
@@ -51,8 +52,11 @@ exports.test = function () {
             tempNode.push(i.metadata.name);
         }
 
+
+
         for (var i of Pods.items) {
             if (tempNode.indexOf(i.spec.nodeName) == -1) {
+                // console.log(tempNode.indexOf(i.spec.nodeName))
                 continue;
             } else {
                 nodeList.push({
