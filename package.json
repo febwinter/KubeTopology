@@ -6,19 +6,19 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
-    "@kubernetes/client-node": "^0.11.0",
-    "amqplib": "^0.5.5",
-    "cookie-parser": "~1.4.4",
-    "debug": "~2.6.9",
-    "ejs": "^2.7.1",
-    "express": "4.16.4",
-    "http-errors": "~1.6.3",
+    "@kubernetes/client-node": "^0.16.3",
+    "amqplib": "^0.8.0",
+    "cookie-parser": "~1.4.6",
+    "debug": "~4.3.4",
+    "ejs": "^3.1.6",
+    "express": "4.17.3",
+    "http-errors": "~2.0.0",
     "jade": "~1.11.0",
-    "jquery": "^3.4.1",
-    "kubernetes-client": "^8.3.5",
-    "morgan": "~1.9.1",
-    "mqtt": "^3.0.0",
-    "node-fetch": "^2.6.0",
+    "jquery": "^3.6.0",
+    "kubernetes-client": "^9.0.0",
+    "morgan": "~1.10.0",
+    "mqtt": "^4.3.7",
+    "node-fetch": "^3.2.3",
     "socketio": "^1.0.0"
   }
 }
